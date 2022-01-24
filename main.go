@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"ginExample/routers"
 	"github.com/gin-gonic/gin"
 	"io"
 	"net/http"
@@ -11,12 +12,14 @@ import (
 
 func main() {
 
+	//e := casbin.NewEnforcer("./model.conf", "./policy.cvs")
+	//auth.Check(e, "dajun", "data1", "read")
+	//auth.Check(e, "lizi", "data2", "write")
+	//auth.Check(e, "dajun", "data1", "write")
+	//auth.Check(e, "dajun", "data2", "read")
 	f, _ := os.Create("gin.log")
 	gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
 	r := gin.Default()
-	r.GET("/", func(c *gin.Context) {
-		c.String(http.StatusOK, "hello world")
-	})
 
 	//api参数
 	r.GET("/user/:name/*action", func(c *gin.Context) {
@@ -42,52 +45,6 @@ func main() {
 		c.String(http.StatusOK, fmt.Sprintf("username:%s,password:%s,type:%s", username, password, types))
 	})
 
-	//上传单个文件
-
-	//上传多个文件
-	r.MaxMultipartMemory = 8 << 20
-	r.POST("/upload", func(c *gin.Context) {
-		file, err := c.FormFile("file")
-
-		if err != nil {
-			c.String(500, "upload err")
-		}
-		fp, err := file.Open()
-		buff := make([]byte, file.Size)
-		fp.Read(buff)
-
-		fmt.Println("buff== ", buff)
-		//c.SaveUploadedFile(file, file.Filename)
-		c.String(http.StatusOK, string(buff))
-	})
-
-	r.POST("buff", func(c *gin.Context) {
-
-		str := c.PostForm("file")
-
-		fmt.Println([]byte(str))
-		c.String(200, "ok")
-
-	})
-	//上传多个文件
-	r.POST("/uploads", func(c *gin.Context) {
-		form, err := c.MultipartForm()
-		if err != nil {
-			c.String(http.StatusOK, fmt.Sprintf("get err %s", err.Error()))
-		}
-
-		//获取所有图片
-		files := form.File["files"]
-
-		for _, file := range files {
-			if err := c.SaveUploadedFile(file, file.Filename); err != nil {
-				c.String(http.StatusBadRequest, fmt.Sprintf("upload err %s", err.Error()))
-				return
-			}
-		}
-		c.String(200, fmt.Sprintf("upload ok %d files", len(files)))
-	})
-
 	v1 := r.Group("v1")
 	{
 		v1.GET("'/login", login)
@@ -99,6 +56,11 @@ func main() {
 		v2.POST("/login", login)
 		v2.POST("/submit", submit)
 	}
+
+	routers.TagRouter(r)
+	routers.ArticleRouter(r)
+	routers.UploadRouter(r)
+
 	r.Run(":8000")
 }
 

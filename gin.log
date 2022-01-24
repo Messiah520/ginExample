@@ -4,18 +4,18 @@
  - using env:	export GIN_MODE=release
  - using code:	gin.SetMode(gin.ReleaseMode)
 
-[GIN-debug] GET    /                         --> main.main.func1 (3 handlers)
-[GIN-debug] GET    /user/:name/*action       --> main.main.func2 (3 handlers)
-[GIN-debug] GET    /user                     --> main.main.func3 (3 handlers)
-[GIN-debug] POST   /form                     --> main.main.func4 (3 handlers)
-[GIN-debug] POST   /upload                   --> main.main.func5 (3 handlers)
-[GIN-debug] POST   /buff                     --> main.main.func6 (3 handlers)
-[GIN-debug] POST   /uploads                  --> main.main.func7 (3 handlers)
+[GIN-debug] GET    /user/:name/*action       --> main.main.func1 (3 handlers)
+[GIN-debug] GET    /user                     --> main.main.func2 (3 handlers)
+[GIN-debug] POST   /form                     --> main.main.func3 (3 handlers)
 [GIN-debug] GET    /v1/'/login               --> main.login (3 handlers)
 [GIN-debug] GET    /v1/submit                --> main.submit (3 handlers)
 [GIN-debug] POST   /v2/login                 --> main.login (3 handlers)
 [GIN-debug] POST   /v2/submit                --> main.submit (3 handlers)
+[GIN-debug] GET    /tagList                  --> ginExample/routers.tagListHandler (3 handlers)
+[GIN-debug] GET    /articleList              --> ginExample/routers.articleList (3 handlers)
+[GIN-debug] POST   /upload                   --> ginExample/routers.upload (3 handlers)
+[GIN-debug] POST   /uploads                  --> ginExample/routers.uploads (3 handlers)
 [GIN-debug] [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
 Please check https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies for details.
 [GIN-debug] Listening and serving HTTP on :8000
-[GIN] 2022/01/21 - 16:43:33 | 200 |            0s |             ::1 | POST     "/buff"
+[GIN] 2022/01/24 - 10:53:17 | 200 |       189.9µs |             ::1 | POST     "/upload"

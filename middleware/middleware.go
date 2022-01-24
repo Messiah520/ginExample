@@ -2,7 +2,9 @@ package middleware
 
 import (
 	"fmt"
+	"github.com/casbin/casbin"
 	"github.com/gin-gonic/gin"
+	"log"
 	"time"
 )
 
@@ -16,5 +18,22 @@ func MiddleWare1() gin.HandlerFunc {
 		fmt.Println("中间件执行完毕", status)
 		t2 := time.Since(t)
 		fmt.Println("time:", t2)
+	}
+}
+
+func MyAuth(e *casbin.Enforcer) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		obj := c.Request.URL.RequestURI()
+		act := c.Request.Method
+
+		sub := "root"
+
+		if ok := e.Enforce(sub, obj, act); ok {
+			log.Println("Check successfully")
+			c.Next()
+		} else {
+			log.Println("sorry , Check failed")
+			c.Abort()
+		}
 	}
 }
